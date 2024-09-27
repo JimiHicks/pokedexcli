@@ -3,16 +3,19 @@ package main
 import (
 	"fmt"
 
-	"github.com/Jimihicks/pokedexcli/internal"
+	pokedexapi "github.com/Jimihicks/pokedexcli/internal"
 )
 
 func commandMap(c *config) error {
-	resp := &internal.GetLocationAreasResponse{}
+	resp := &pokedexapi.GetLocationAreasResponse{}
 	var err error
-	if c.next != nil {
-		resp, err = internal.GetLocationAreasFromURL(*c.next)
+	if !c.initialized {
+		c.initialized = true
+		resp, err = pokedexapi.GetLocationAreas()
+	} else if c.next != nil {
+		resp, err = pokedexapi.GetLocationAreasFromURL(*c.next)
 	} else {
-		resp, err = internal.GetLocationAreas()
+		return fmt.Errorf("no next page available")
 	}
 	if err != nil {
 		return err

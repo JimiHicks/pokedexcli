@@ -1,4 +1,4 @@
-package internal
+package pokedexapi
 
 import (
 	"encoding/json"
@@ -16,19 +16,24 @@ func GetLocationAreasFromURL(url string) (*GetLocationAreasResponse, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer res.Body.Close()
+
 	body, err := io.ReadAll(res.Body)
-	res.Body.Close()
+
 	if res.StatusCode > 299 {
 		return nil, fmt.Errorf("response failed with status code: %d and\nbody: %s", res.StatusCode, body)
 	}
+
 	if err != nil {
 		return nil, err
 	}
+
 	response := GetLocationAreasResponse{}
 	err = json.Unmarshal(body, &response)
 	if err != nil {
 		return nil, err
 	}
+
 	return &response, nil
 }
 

@@ -72,6 +72,7 @@ func getCommandMap() map[string]cliCommand {
 }
 
 type config struct {
-	next     *string
-	previous *string
+	initialized bool
+	next        *string
+	previous    *string
 }

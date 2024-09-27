@@ -3,14 +3,14 @@ package main
 import (
 	"fmt"
 
-	"github.com/Jimihicks/pokedexcli/internal"
+	pokedexapi "github.com/Jimihicks/pokedexcli/internal"
 )
 
 func commandMapb(c *config) error {
-	resp := &internal.GetLocationAreasResponse{}
+	resp := &pokedexapi.GetLocationAreasResponse{}
 	var err error
 	if c.previous != nil {
-		resp, err = internal.GetLocationAreasFromURL(*c.previous)
+		resp, err = pokedexapi.GetLocationAreasFromURL(*c.previous)
 	} else {
 		return fmt.Errorf("no previous page available")
 	}
