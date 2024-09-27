@@ -9,8 +9,9 @@ import (
 
 func startRepl() {
 	scanner := bufio.NewScanner(os.Stdin)
+	var config config
 	for {
-		fmt.Println("Pokedex > ")
+		fmt.Print("Pokedex > ")
 		scanner.Scan()
 
 		words := cleanInput(scanner.Text())
@@ -22,7 +23,7 @@ func startRepl() {
 
 		command, exists := getCommandMap()[commandName]
 		if exists {
-			err := command.callback()
+			err := command.callback(&config)
 			if err != nil {
 				fmt.Println(err)
 			}
@@ -42,7 +43,7 @@ func cleanInput(text string) []string {
 type cliCommand struct {
 	name        string
 	description string
-	callback    func() error
+	callback    func(*config) error
 }
 
 func getCommandMap() map[string]cliCommand {
@@ -57,5 +58,20 @@ func getCommandMap() map[string]cliCommand {
 			description: "Exit the Pokedex",
 			callback:    commandExit,
 		},
+		"map": {
+			name:        "map",
+			description: "Load next page of areas",
+			callback:    commandMap,
+		},
+		"mapb": {
+			name:        "mapb",
+			description: "Load previous page of areas",
+			callback:    commandMapb,
+		},
 	}
+}
+
+type config struct {
+	next     *string
+	previous *string
 }
